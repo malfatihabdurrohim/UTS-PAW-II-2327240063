@@ -1,12 +1,13 @@
 // CONTROLLER: menangani request, validasi, dan response 
-const Buku = require('../models/bukuModel'); 
+const RentalMobil = require('../models/RentalMobilModel'); 
 const Kategori = require('../models/kategoriModel');
 const { errorHttp } = require('../middlewares/errorHandler'); 
+const mongoose = require('mongoose');
 
 const LIMIT_DEFAULT = 10; 
 const LIMIT_MAKS = 50; 
-const FIELD_SORT = ['judul', 'penulis', 'tahun', 'createdAt']; 
-const FIELD_BOLEH_DIPILIH = ['judul', 'penulis', 'tahun', 'penerbit', 'kategoriId', 'createdAt', 'updatedAt']; 
+const FIELD_SORT = ['nama rental', 'alamat', 'tahun', 'createdAt']; 
+const FIELD_BOLEH_DIPILIH = ['nama rental', 'alamat', 'jam buka', 'pilih sewa', 'kategoriId', 'createdAt', 'updatedAt']; 
 
 // Mengubah bilangan dari query string menjadi bilangan bulat yang aman 
 function angkaAman(nilai, bawaan, min, maks) {
@@ -170,4 +171,30 @@ exports.remove = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+};// 2. MAIN SCHEMA: Buku
+const rentalmobilSchema = new mongoose.Schema({
+  judul: {
+    type: String,
+    required: [true, 'Judul buku wajib diisi'],
+    trim: true
+  },
+  penulis: {
+    type: String,
+    required: [true, 'Penulis wajib diisi'],
+    trim: true
+  },
+  tahun: {
+    type: Number,
+    required: [true, 'Tahun terbit wajib diisi'],
+    min: [1900, 'Tahun tidak valid'],
+    max: [2100, 'Tahun tidak valid']
+  },
+  // EMBEDDING: Penerbit
+  penerbit: penerbitSchema,
+  // REFERENCING: Relasi ke Kategori
+  kategoriId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Kategori'
+  }
+}, { timestamps: true });
+
