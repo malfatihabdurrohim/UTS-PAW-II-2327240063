@@ -2,7 +2,6 @@
 const RentalMobil = require('../models/RentalMobilModel'); 
 const Kategori = require('../models/kategoriModel');
 const { errorHttp } = require('../middlewares/errorHandler'); 
-const mongoose = require('mongoose');
 
 const LIMIT_DEFAULT = 10; 
 const LIMIT_MAKS = 50; 
@@ -16,7 +15,7 @@ function angkaAman(nilai, bawaan, min, maks) {
   return Math.min(Math.max(n, min), maks);
 }
 
-// [POST] Membuat data Buku baru (Embedding penerbit + Referencing kategoriId)
+// [POST] Membuat data RentalMobil baru (Embedding penerbit + Referencing kategoriId)
 exports.create = async (req, res, next) => { 
   try { 
     const { kategoriId } = req.body;
@@ -25,11 +24,11 @@ exports.create = async (req, res, next) => {
       if (!katAda) return next(errorHttp(400, `Kategori dengan id ${kategoriId} tidak ditemukan`));
     }
 
-    const buku = await Buku.create(req.body); 
+    const rentalmobil = await RentalMobil.create(req.body); 
     const populated = await buku.populate('kategoriId', 'kode namaKategori deskripsi');
     res.status(201).json({
       status: 'success',
-      message: 'Buku berhasil ditambahkan',
+      message: 'RentalMobil berhasil ditambahkan',
       data: populated
     }); 
   } catch (err) { 
@@ -171,30 +170,4 @@ exports.remove = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};// 2. MAIN SCHEMA: Buku
-const rentalmobilSchema = new mongoose.Schema({
-  judul: {
-    type: String,
-    required: [true, 'Judul buku wajib diisi'],
-    trim: true
-  },
-  penulis: {
-    type: String,
-    required: [true, 'Penulis wajib diisi'],
-    trim: true
-  },
-  tahun: {
-    type: Number,
-    required: [true, 'Tahun terbit wajib diisi'],
-    min: [1900, 'Tahun tidak valid'],
-    max: [2100, 'Tahun tidak valid']
-  },
-  // EMBEDDING: Penerbit
-  penerbit: penerbitSchema,
-  // REFERENCING: Relasi ke Kategori
-  kategoriId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Kategori'
-  }
-}, { timestamps: true });
-
+};
