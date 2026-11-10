@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const rentalmobilController = require('../controllers/rentalmobilController');
+
+// Import Controller Rental Mobil
+const rentalMobilController = require('../controllers/RentalMobilController');
+
+// Import Middleware API Key
 const cekApiKey = require('../middlewares/cekApiKey');
 
-router.get('/', rentalmobilController.getAll);
-router.get('/:id', rentalmobilController.getById);
-router.post('/', cekApiKey, rentalmobilController.create);
-router.put('/:id', cekApiKey, rentalmobilController.update);
-router.delete('/:id', cekApiKey, rentalmobilController.remove);
+// Route Rental Mobil
+router.get('/', rentalMobilController.getAll);
+router.get('/:id', rentalMobilController.getById);
+router.post('/', cekApiKey, rentalMobilController.create);
+router.put('/:id', cekApiKey, rentalMobilController.update);
+router.delete('/:id', cekApiKey, rentalMobilController.remove);
 
 module.exports = router;

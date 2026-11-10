@@ -1,22 +1,38 @@
 const mongoose = require('mongoose');
 
-const kategoriSchema = new mongoose.Schema({
-  kode: { 
-    type: String, 
-    required: [true, 'Kode kategori wajib diisi'], 
-    unique: true, 
-    trim: true, 
-    uppercase: true 
-  },
-  namaKategori: { 
-    type: String, 
-    required: [true, 'Nama kategori wajib diisi'], 
-    trim: true 
-  },
-  deskripsi: {
+// SCHEMA RENTAL MOBIL
+const rentalMobilSchema = new mongoose.Schema({
+
+  namaRental: {
     type: String,
-    default: ''
+    required: [true, 'Nama rental wajib diisi'],
+    trim: true
+  },
+
+  alamat: {
+    type: String,
+    required: [true, 'Alamat rental wajib diisi'],
+    trim: true
+  },
+
+  jamBuka: {
+    type: String,
+    required: [true, 'Jam buka wajib diisi']
+  },
+
+  pilihSewa: {
+    type: String,
+    required: [true, 'Pilihan sewa wajib diisi']
+  },
+
+  kategoriId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Kategori',
+    required: [true, 'Kategori wajib dipilih']
   }
+
 }, { timestamps: true });
 
-module.exports = mongoose.model('Kategori', kategoriSchema);
+// EXPORT MODEL
+module.exports = mongoose.models.RentalMobil ||
+  mongoose.model('RentalMobil', rentalMobilSchema);
