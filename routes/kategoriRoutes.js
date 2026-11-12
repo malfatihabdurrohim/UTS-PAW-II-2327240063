@@ -3,24 +3,24 @@ const express = require('express');
 const router = express.Router();
 
 // Controller Rental Mobil
-const rentalMobilController = require('../controllers/RentalMobilController');
+const kategoriController = require('../controllers/kategoriController');
 
 // Middleware API Key
 const cekApiKey = require('../middlewares/cekApiKey');
 
 // Menampilkan semua data rental mobil
-router.get('/', rentalMobilController.getAll);
+router.get('/', kategoriController.getAll);
 
 // Menampilkan data rental mobil berdasarkan ID
-router.get('/:id', rentalMobilController.getById);
+router.get('/:id', kategoriController.getById);
 
 // Menambahkan data rental mobil
-router.post('/', cekApiKey, rentalMobilController.create);
+router.post('/', cekApiKey, kategoriController.create);
 
 // Mengubah data rental mobil
-router.put('/:id', cekApiKey, rentalMobilController.update);
+router.put('/:id', cekApiKey, kategoriController.update);
 
 // Menghapus data rental mobil
-router.delete('/:id', cekApiKey, rentalMobilController.remove);
+router.delete('/:id', cekApiKey, kategoriController.remove);
 
 module.exports = router;
